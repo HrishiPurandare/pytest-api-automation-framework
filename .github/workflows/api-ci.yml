@@ -1,0 +1,15 @@
+name: API CI
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with: python-version: 3.10
+      - run: python -m venv venv && . venv/bin/activate && pip install -r requirements.txt
+      - run: . venv/bin/activate && pytest -q --maxfail=1 --showlocals
+      - name: Upload pytest results
+        if: always()
+        run: echo "Reports available"
