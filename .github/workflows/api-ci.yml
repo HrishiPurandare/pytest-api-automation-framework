@@ -10,10 +10,19 @@ jobs:
         with:
           python-version: 3.9
       - run: python -m venv venv && . venv/bin/activate && pip install -r requirements.txt
+      - name: Start mock-api
+        run: docker build -t mock-api mock-server && docker run -d -p 5000:5000 mock-api
+      - name: Wait for mock-api
+        run: |
+          for i in {1..10}; do
+            if nc -z localhost 5000; then
+              echo "Mock API is up!";
+              break;
+            fi;
+            echo "Waiting for Mock API...";
+            sleep 3;
+          done
       - run: . venv/bin/activate && PYTHONPATH=$(pwd) pytest -q --maxfail=1 --showlocals
       - name: Upload pytest results
         if: always()
         run: echo "Reports available"
-      - name: Start mock-api
-        run: docker build -t mock-api mock-server && docker run -d -p 5000:5000 mock-api
-      
