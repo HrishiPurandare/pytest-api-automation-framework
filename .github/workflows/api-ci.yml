@@ -10,7 +10,7 @@ jobs:
         with:
           python-version: 3.9
       - run: python -m venv venv && . venv/bin/activate && pip install -r requirements.txt
-      - run: . venv/bin/activate && pytest -q --maxfail=1 --showlocals
+      - run: . venv/bin/activate && PYTHONPATH=$(pwd) pytest -q --maxfail=1 --showlocals
       - name: Upload pytest results
         if: always()
         run: echo "Reports available"
