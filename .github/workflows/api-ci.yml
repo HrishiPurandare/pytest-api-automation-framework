@@ -26,3 +26,8 @@ jobs:
       - name: Upload pytest results
         if: always()
         run: echo "Reports available"
+      - name: Upload PyTest HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-html-report
+          path: report.html  # Matches the file generated above
