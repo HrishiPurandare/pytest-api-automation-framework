@@ -1,6 +1,4 @@
-pytest
+pytest>=7
 requests
 jsonschema
-pytest-html
-allure-pytest
 pytest-html

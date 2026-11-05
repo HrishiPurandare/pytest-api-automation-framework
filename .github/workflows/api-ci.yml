@@ -7,34 +7,29 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-22.04
-
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.11'
 
       - name: Install dependencies
-        run: |
-            python -m pip install --upgrade pip
-            pip install -r requirements.txt
-            pip install pytest pytest-html
+        run: pip install -r requirements.txt
 
-      - name: Build & start mock API
+      - name: Build and start mock API
         run: |
           docker build -t mock-api ./mock-server
           docker run -d --name mock-api -p 5000:5000 mock-api
+          curl --silent --show-error --fail --retry 15 --retry-delay 1 --retry-all-errors http://localhost:5000/users/1
 
       - name: Run pytest with HTML report
         env:
           API_BASE: http://localhost:5000
-        run: pytest -q --maxfail=1 --html=report.html --self-contained-html
+        run: pytest -q --html=report.html --self-contained-html
 
-      - name: Upload PyTest HTML Report
+      - name: Upload HTML report
         if: always()
         uses: actions/upload-artifact@v4
         with:
