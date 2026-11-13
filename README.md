@@ -25,7 +25,6 @@ Set `API_BASE` to test a different server. Use `pytest -m smoke` for the quick s
 - `tests/conftest.py`: shared client fixture
 - `tests/users/`: positive, negative and parametrised user tests
 - `mock-server/`: Flask app under test
-- `coding-practice/`: separate Python practice exercises, not part of the suite
 
 ## CI
 
